@@ -27,19 +27,19 @@
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 15px;
             flex-grow: 1;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
-            padding: 20px 0;
+            margin-bottom: 30px;
+            padding: 15px 0;
         }
 
         .header h1 {
             font-size: 2.5rem;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             background: linear-gradient(45deg, #ffd700, #ffed4e);
             background-clip: text;
@@ -48,27 +48,28 @@
         }
 
         .header p {
-            font-size: 1rem;
-            line-height: 1.6;
+            font-size: 0.95rem;
+            line-height: 1.5;
             opacity: 0.9;
-            max-width: 600px;
+            max-width: 550px;
             margin: 0 auto;
+            color: white;
         }
 
         .card-section {
             text-align: center;
-            margin: 30px 0;
+            margin: 20px 0;
         }
 
         .draw-button, .reset-button {
             border: none;
-            padding: 12px 24px;
-            font-size: 1.1rem;
+            padding: 10px 20px;
+            font-size: 1rem;
             color: white;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
             margin: 10px auto;
             display: inline-block;
             touch-action: manipulation;
@@ -79,7 +80,7 @@
         }
         .draw-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         .draw-button:active {
             transform: translateY(0);
@@ -91,9 +92,10 @@
 
         .card-container {
             perspective: 1000px;
-            margin: 20px auto;
-            width: 300px;
-            height: 420px;
+            margin: 15px auto;
+            width: 100%;
+            max-width: 300px;
+            height: 400px;
             display: none;
         }
 
@@ -115,12 +117,12 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: bold;
             overflow: hidden;
         }
@@ -128,7 +130,7 @@
         .card-back {
             background: linear-gradient(45deg, #2c3e50, #3498db);
             color: white;
-            border: 3px solid #ffd700;
+            border: 2px solid #ffd700;
             text-align: center;
         }
 
@@ -137,72 +139,73 @@
             color: #333;
             transform: rotateY(180deg);
             flex-direction: column;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
             justify-content: space-around;
         }
 
         .card-image {
-            width: 160px;
-            height: 160px;
+            width: 140px;
+            height: 140px;
             object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
         }
 
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
             color: #2c3e50;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         .card-text {
-            font-size: 0.9rem;
-            line-height: 1.4;
+            font-size: 0.85rem;
+            line-height: 1.3;
             color: #555;
             flex-grow: 1;
             overflow-y: auto;
         }
 
         .card-intention {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-style: italic;
             color: #777;
             border-top: 1px solid #eee;
-            padding-top: 8px;
+            padding-top: 6px;
             width: 100%;
         }
 
         .card-mantra-section {
             border-top: 1px solid #eee;
-            padding-top: 8px;
+            padding-top: 6px;
             width: 100%;
         }
 
         .card-mantra {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: bold;
             color: #6a1b9a;
         }
 
         .loading {
-            margin: 20px 0;
+            margin: 15px 0;
             text-align: center;
             display: none;
         }
         .loading p {
-            margin-top: 8px;
-            font-size: 0.9rem;
+            margin-top: 6px;
+            font-size: 0.85rem;
+            color: white;
         }
 
         .spinner {
-            border: 3px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(255,255,255,0.3);
             border-radius: 50%;
-            border-top: 3px solid white;
-            width: 36px;
-            height: 36px;
+            border-top: 2px solid white;
+            width: 32px;
+            height: 32px;
             animation: spin 1s linear infinite;
             margin: 0 auto;
         }
@@ -214,21 +217,22 @@
 
         .instructions {
             background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 12px;
-            margin: 20px 0;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 15px 0;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
         }
 
         .instructions h3 {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             color: #ffd700;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
         .instructions p {
-            line-height: 1.6;
-            font-size: 0.9rem;
+            line-height: 1.5;
+            font-size: 0.85rem;
+            color: white;
         }
 
         .reset-button {
@@ -243,60 +247,78 @@
 
         footer {
             text-align: center;
-            padding: 15px;
-            font-size: 0.85rem;
+            padding: 10px;
+            font-size: 0.8rem;
             opacity: 0.7;
+            color: white;
         }
 
         @media (max-width: 768px) {
+            body {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+            }
             .header h1 { font-size: 2rem; }
-            .header p { font-size: 0.95rem; }
+            .header p { font-size: 0.9rem; color: white; }
             
             .draw-button, .reset-button {
-                padding: 12px 20px;
-                font-size: 1rem;
-                min-height: 48px;
+                padding: 10px 18px;
+                font-size: 0.95rem;
+                min-height: 44px;
                 width: 100%;
-                max-width: 280px;
+                max-width: 260px;
+                color: white;
             }
             
             .card-container {
                 width: 100%;
-                max-width: 300px;
-                height: 400px;
+                max-width: 280px;
+                height: 380px;
             }
             .card-image {
-                width: 140px;
-                height: 140px;
+                width: 130px;
+                height: 130px;
             }
+            .loading p { color: white; }
+            .instructions p { color: white; }
+            footer { color: white; }
         }
 
         @media (max-width: 480px) {
-            .header h1 { font-size: 1.6rem; }
+            body {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+            }
+            .header h1 { font-size: 1.5rem; }
+            .header p { font-size: 0.85rem; color: white; }
             
             .draw-button, .reset-button {
-                padding: 10px 15px;
-                font-size: 0.95rem;
-                min-height: 44px;
-                max-width: 260px;
+                padding: 8px 15px;
+                font-size: 0.9rem;
+                min-height: 40px;
+                max-width: 240px;
+                color: white;
             }
             
             .card-container {
                 width: 100%;
-                max-width: 280px;
+                max-width: 260px;
                 height: auto;
-                min-height: 360px;
+                min-height: 340px;
             }
             .card-front {
                 padding: 8px;
             }
             .card-image {
-                width: 120px;
-                height: 120px;
+                width: 110px;
+                height: 110px;
             }
-            .card-title { font-size: 1rem; }
-            .card-text { font-size: 0.85rem; }
-            .card-intention, .card-mantra { font-size: 0.8rem; }
+            .card-title { font-size: 0.9rem; }
+            .card-text { font-size: 0.8rem; }
+            .card-intention, .card-mantra { font-size: 0.75rem; }
+            .loading p { color: white; }
+            .instructions p { color: white; }
+            footer { color: white; }
         }
     </style>
 </head>
@@ -370,7 +392,7 @@
             resetBtn.style.display = 'none';
             currentYearSpan.textContent = new Date().getFullYear();
 
-            // Cartes oracle avec images corrigées
+            // Cartes oracle avec images
             const cartes = [
                 {
                     nom: "Force Intérieure",
@@ -459,7 +481,7 @@
                          onerror="this.src='${fallbackImage}'">
                     <p class="card-text">${carte.texte}</p>
                     <p class="card-intention"><strong>Intention :</strong> ${carte.intention}</p>
-                   utt                    <div class="card-mantra-section">
+                    <div class="card-mantra-section">
                         <p class="card-mantra"><strong>Mantra :</strong> ${carte.mantra}</p>
                     </div>
                 `;
