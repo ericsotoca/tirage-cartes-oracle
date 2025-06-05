@@ -442,9 +442,6 @@
             cartes.forEach(carte => {
                 const img = new Image();
                 img.src = carte.image;
-                img.onerror = () => {
-                    img.src = "https://via.placeholder.com/180x180/cccccc/666666?text=Image+Non+Trouvée";
-                };
             });
 
             let carteActuelle = null;
@@ -474,11 +471,9 @@
             }
 
             function setupCardContent(carte) {
-                const fallbackImage = "https://via.placeholder.com/180x180/cccccc/666666?text=Image+Non+Trouvée";
                 cardFront.innerHTML = `
                     <h4 class="card-title">${carte.nom}</h4>
-                    <img src="${carte.image}" alt="Illustration de la carte ${carte.nom}" class="card-image" 
-                         onerror="this.src='${fallbackImage}'">
+                    <img src="${carte.image}" alt="Illustration de la carte ${carte.nom}" class="card-image">
                     <p class="card-text">${carte.texte}</p>
                     <p class="card-intention"><strong>Intention :</strong> ${carte.intention}</p>
                     <div class="card-mantra-section">
