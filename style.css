@@ -1,0 +1,290 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: white;
+    display: flex; /* Pour le footer en bas */
+    flex-direction: column; /* Pour le footer en bas */
+    opacity: 0; /* Pour l'animation d'entrée */
+    transition: opacity 0.5s ease-in-out; /* Pour l'animation d'entrée */
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    flex-grow: 1; /* Pour le footer en bas */
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px 0;
+}
+
+.header h1 {
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.header p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.card-section {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.draw-button, .reset-button, .play-mantra-button {
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    margin-bottom: 30px;
+}
+
+.draw-button {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+}
+.draw-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+}
+.draw-button:active {
+    transform: translateY(0);
+}
+.draw-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+.card-container {
+    perspective: 1000px;
+    margin: 30px auto;
+    width: 300px;
+    height: 420px; /* Augmenté pour le mantra */
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* ease plus fun */
+    cursor: pointer;
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    overflow: hidden; /* Pour s'assurer que le contenu ne dépasse pas */
+}
+
+.card-back {
+    background: linear-gradient(45deg, #2c3e50, #3498db);
+    color: white;
+    border: 3px solid #ffd700;
+    text-align: center;
+}
+
+.card-front {
+    background: white;
+    color: #333;
+    transform: rotateY(180deg);
+    flex-direction: column;
+    padding: 15px;
+    text-align: center;
+    justify-content: space-around; /* Pour mieux répartir l'espace */
+}
+
+.card-image {
+    width: 180px; /* Ajusté pour plus de texte */
+    height: 180px; /* Ajusté */
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.card-title { /* Ajouté pour un titre de carte optionnel */
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.card-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    color: #555;
+    flex-grow: 1; /* Permet au texte de prendre de la place */
+}
+
+.card-intention {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #777;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.card-mantra {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #6a1b9a; /* Couleur violette pour le mantra */
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    width: 100%;
+}
+
+.play-mantra-button {
+    background: linear-gradient(45deg, #ab47bc, #8e24aa); /* Violet */
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    margin-bottom: 0; /* Réduit l'espace si c'est le dernier élément */
+}
+.play-mantra-button:hover {
+    background: linear-gradient(45deg, #9c27b0, #7b1fa2);
+}
+
+
+.loading {
+    /* display: none; par défaut dans l'HTML */
+    margin: 20px 0;
+    text-align: center; /* Centrer le texte sous le spinner */
+}
+.loading p {
+    margin-top: 10px;
+}
+
+.spinner {
+    border: 4px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top: 4px solid white;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.instructions {
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin: 30px 0;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* Pour Safari */
+}
+
+.instructions h3 {
+    margin-bottom: 15px;
+    color: #ffd700;
+}
+.instructions p {
+    line-height: 1.7;
+}
+
+.reset-button {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    margin-top: 20px;
+}
+.reset-button:hover {
+    background: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.5);
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9em;
+    opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+    .header p {
+        font-size: 1rem;
+    }
+    .card-container {
+        width: 280px; /* Un peu plus de place pour le texte */
+        height: 400px; /* Ajusté */
+    }
+    .card-image {
+        width: 150px;
+        height: 150px;
+    }
+    .draw-button, .reset-button {
+        padding: 12px 25px;
+        font-size: 1.1rem;
+    }
+}
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.8rem;
+    }
+    .card-container {
+        width: calc(100% - 40px); /* Prend presque toute la largeur */
+        max-width: 280px;
+        height: auto; /* Hauteur auto pour s'adapter au contenu */
+        min-height: 380px;
+    }
+    .card-front {
+        padding: 10px;
+    }
+    .card-image {
+        width: 120px;
+        height: 120px;
+    }
+    .card-text {
+        font-size: 0.9rem;
+    }
+    .card-intention, .card-mantra {
+        font-size: 0.85rem;
+    }
+}
