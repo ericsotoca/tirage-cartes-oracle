@@ -91,19 +91,27 @@ body {
     height: 100%;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* ease plus fun */
+    /* transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); */ /* DÉSACTIVÉ POUR TEST */
     cursor: pointer;
 }
 
 .card.flipped {
-    transform: rotateY(180deg);
+    /* transform: rotateY(180deg); */ /* DÉSACTIVÉ POUR TEST */
+    /* Si l'animation est désactivée, il faut un moyen de voir le recto. */
+    /* On peut le faire via JS en changeant l'opacité/z-index, ou pour ce test, on peut juste laisser le recto visible par défaut. */
+    /* Ou, plus simplement pour le test, si on ne retourne pas, on s'attend à voir le verso par défaut. */
+    /* Si vous voulez voir le recto directement après le clic sur "Tirer une carte" SANS animation, */
+    /* vous devrez ajuster le JS pour qu'il n'ajoute pas la classe 'flipped' mais change directement le contenu et la visibilité. */
+    /* Pour ce test spécifique de désactivation d'animation, le JS va toujours essayer d'ajouter 'flipped'. */
+    /* Si la carte ne se retourne pas visuellement, c'est le comportement attendu de cette modification CSS. */
+    /* La logique de flipCardAction() dans le JS s'occupera toujours de révéler le contenu du .card-front. */
 }
 
 .card-face {
     position: absolute;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden;
+    backface-visibility: hidden; /* Important même sans l'animation complète pour cacher le dos du côté visible */
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     display: flex;
@@ -119,17 +127,42 @@ body {
     color: white;
     border: 3px solid #ffd700;
     text-align: center;
+    /* Si .card.flipped n'applique plus rotateY(180deg), .card-back sera toujours visible par défaut. */
+    /* Le JS devra gérer la visibilité de .card-back et .card-front si l'animation est retirée. */
+    /* Cependant, pour ce test, on veut juste voir si la *performance* de l'animation est le problème. */
+    /* Le JS ajoute 'flipped'. Si transform: rotateY(180deg) est commenté, la carte ne tournera pas. */
+    /* Mais le contenu de card-front sera injecté. Pour le voir, il faudrait que .card-front soit "par-dessus". */
+    /* Une solution simple pour le test : */
+}
+
+.card.flipped .card-back {
+    /* On peut masquer le dos quand la carte est "flipped" en JS, même sans rotation */
+    opacity: 0;
+    pointer-events: none; /* Empêche les interactions avec le dos caché */
 }
 
 .card-front {
     background: white;
     color: #333;
-    transform: rotateY(180deg);
+    transform: rotateY(180deg); /* Laisser cette transformation initiale pour que .card-back soit visible au début */
+    /* Si .card.flipped ne change plus le transform, il faut un autre moyen de rendre .card-front visible. */
+    /* On va utiliser l'opacité et s'assurer qu'il est au-dessus. */
     flex-direction: column;
     padding: 15px;
     text-align: center;
     justify-content: space-around; /* Pour mieux répartir l'espace */
+    opacity: 0; /* Caché initialement si on ne compte que sur la classe flipped pour le montrer */
+    z-index: 1; /* S'assurer qu'il est au-dessus du dos quand il devient visible */
 }
+
+.card.flipped .card-front {
+    /* Si la transformation rotateY(180deg) sur .card.flipped est commentée, */
+    /* on doit annuler la rotation initiale de .card-front et le rendre visible. */
+    transform: rotateY(0deg); /* Annule la rotation initiale pour qu'il soit face à nous */
+    opacity: 1; /* Le rendre visible */
+    z-index: 2; /* S'assurer qu'il est au-dessus du dos */
+}
+
 
 .card-image {
     width: 180px; /* Ajusté pour plus de texte */
@@ -165,14 +198,23 @@ body {
     width: 100%;
 }
 
-.card-mantra {
+.card-mantra { /* Renommé pour correspondre au HTML, c'était card-mantra-section avant pour le div */
     font-size: 1rem;
     font-weight: bold;
     color: #6a1b9a; /* Couleur violette pour le mantra */
+    /* border-top: 1px solid #eee; */ /* Déjà dans card-intention, peut-être redondant ou pour le div parent */
+    /* padding-top: 10px; */
+    width: 100%;
+}
+/* Si .card-mantra est la classe du <p>, les styles ci-dessus sont bons. */
+/* Si c'est .card-mantra-section qui est le conteneur, alors : */
+.card-mantra-section {
     border-top: 1px solid #eee;
     padding-top: 10px;
     width: 100%;
+    margin-top: 10px; /* Ajouté pour espacer de l'intention */
 }
+
 
 .play-mantra-button {
     background: linear-gradient(45deg, #ab47bc, #8e24aa); /* Violet */
@@ -284,7 +326,7 @@ footer {
     .card-text {
         font-size: 0.9rem;
     }
-    .card-intention, .card-mantra {
+    .card-intention, .card-mantra { /* J'ai regroupé car ils avaient des styles similaires */
         font-size: 0.85rem;
     }
 }
