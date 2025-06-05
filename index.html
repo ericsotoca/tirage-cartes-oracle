@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Tirage de cartes oracle pour guidance spirituelle et réflexion personnelle, avec messages et intentions.">
     <title>🔮 Oracle des Chants de l'Âme</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔮</text></svg>">
@@ -11,7 +11,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -23,7 +22,6 @@
             flex-direction: column;
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
-            overflow-x: hidden;
         }
 
         .container {
@@ -31,7 +29,6 @@
             margin: 0 auto;
             padding: 20px;
             flex-grow: 1;
-            width: 100%;
         }
 
         .header {
@@ -65,22 +62,22 @@
 
         .draw-button, .reset-button, .play-mantra-button {
             border: none;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            color: white;
+            padding: 15px 30px !important;
+            font-size: 1.2rem !important;
+            color: white !important;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
             margin-bottom: 30px;
-            display: inline-block;
-            position: relative;
-            z-index: 10;
-            -webkit-appearance: none;
+            display: inline-block !important;
+            visibility: visible !important;
+            position: relative !important;
+            z-index: 10 !important;
         }
 
         .draw-button {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24) !important;
         }
         .draw-button:hover {
             transform: translateY(-2px);
@@ -99,7 +96,7 @@
             margin: 30px auto;
             width: 300px;
             height: 420px;
-            display: none;
+            display: none !important;
         }
 
         .card {
@@ -109,13 +106,10 @@
             transform-style: preserve-3d;
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
-            -webkit-transform-style: preserve-3d;
-            -webkit-transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .card.flipped {
             transform: rotateY(180deg);
-            -webkit-transform: rotateY(180deg);
         }
 
         .card-face {
@@ -131,7 +125,6 @@
             font-size: 1.5rem;
             font-weight: bold;
             overflow: hidden;
-            -webkit-backface-visibility: hidden;
         }
 
         .card-back {
@@ -149,7 +142,6 @@
             padding: 15px;
             text-align: center;
             justify-content: space-around;
-            -webkit-transform: rotateY(180deg);
         }
 
         .card-image {
@@ -213,7 +205,7 @@
         .loading {
             margin: 20px 0;
             text-align: center;
-            display: none;
+            display: none !important;
         }
         .loading p {
             margin-top: 10px;
@@ -227,17 +219,11 @@
             height: 40px;
             animation: spin 1s linear infinite;
             margin: 0 auto;
-            -webkit-border-radius: 50%;
-            -webkit-animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-        @-webkit-keyframes spin {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
         }
 
         .instructions {
@@ -258,13 +244,13 @@
         }
 
         .reset-button {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.2) !important;
             border: 2px solid rgba(255,255,255,0.3);
             margin-top: 20px;
-            display: none;
+            display: none !important;
         }
         .reset-button:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.3) !important;
             border-color: rgba(255,255,255,0.5);
         }
 
@@ -280,8 +266,8 @@
             .header p { font-size: 1rem; }
             
             .draw-button, .reset-button {
-                padding: 15px 25px;
-                font-size: 1.2rem;
+                padding: 15px 25px !important;
+                font-size: 1.2rem !important;
                 min-height: 50px;
                 width: auto;
                 min-width: 200px;
@@ -301,8 +287,8 @@
             .header h1 { font-size: 1.8rem; }
             
             .draw-button, .reset-button {
-                padding: 18px 30px;
-                font-size: 1.1rem;
+                padding: 18px 30px !important;
+                font-size: 1.1rem !important;
                 min-height: 55px;
                 width: calc(100% - 40px);
                 max-width: 300px;
@@ -386,6 +372,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('[DEBUG] DOM chargé - début initialisation');
+            
             const drawBtn = document.getElementById('drawBtn');
             const resetBtn = document.getElementById('resetBtn');
             const loadingDiv = document.getElementById('loading');
@@ -394,11 +382,29 @@
             const cardFront = document.getElementById('cardFront');
             const currentYearSpan = document.getElementById('currentYear');
 
-            // Forcer les états initiaux
-            if(drawBtn) drawBtn.style.display = 'inline-block';
-            if(cardContainer) cardContainer.style.display = 'none';
-            if(loadingDiv) loadingDiv.style.display = 'none';
-            if(resetBtn) resetBtn.style.display = 'none';
+            // Forcer les états initiaux explicitement
+            if(drawBtn) {
+                drawBtn.style.display = 'inline-block';
+                drawBtn.style.visibility = 'visible';
+                console.log('[DEBUG] Bouton drawBtn forcé visible');
+            } else {
+                console.error('[ERROR] drawBtn introuvable !');
+            }
+            
+            if(cardContainer) {
+                cardContainer.style.display = 'none';
+                console.log('[DEBUG] CardContainer forcé masqué');
+            }
+            
+            if(loadingDiv) {
+                loadingDiv.style.display = 'none';
+                console.log('[DEBUG] Loading forcé masqué');
+            }
+            
+            if(resetBtn) {
+                resetBtn.style.display = 'none';
+                console.log('[DEBUG] ResetBtn forcé masqué');
+            }
 
             if (currentYearSpan) {
                 currentYearSpan.textContent = new Date().getFullYear();
@@ -450,19 +456,35 @@
                 }
             ];
 
+            if (cartes.length === 0) {
+                console.error('[ERROR] Tableau cartes vide !');
+                if(drawBtn) drawBtn.disabled = true;
+            } else {
+                console.log(`[DEBUG] ${cartes.length} cartes chargées avec succès`);
+            }
+
             let carteActuelle = null;
             let carteRevelee = false;
 
             function drawCardProcess() {
+                console.log('[DEBUG] drawCardProcess() appelé');
+                
                 try {
-                    if (!drawBtn || !loadingDiv || !cardContainer || !resetBtn || !cardElement) return;
+                    if (!drawBtn || !loadingDiv || !cardContainer || !resetBtn || !cardElement) {
+                        console.error('[ERROR] Éléments DOM manquants');
+                        return;
+                    }
 
+                    // Masquer le bouton et afficher le loading
                     drawBtn.disabled = true;
                     drawBtn.style.display = 'none';
                     loadingDiv.style.display = 'block';
                     cardContainer.style.display = 'none';
                     resetBtn.style.display = 'none';
+                    
+                    console.log('[DEBUG] Interface mise à jour - loading visible');
 
+                    // Reset de la carte
                     if (cardElement.classList.contains('flipped')) {
                         cardElement.classList.remove('flipped');
                     }
@@ -470,40 +492,51 @@
                     cardElement.setAttribute('aria-label', 'Carte oracle face cachée. Cliquez ou appuyez sur Entrée pour révéler.');
 
                     setTimeout(() => {
+                        console.log('[DEBUG] Timeout exécuté - sélection carte');
+                        
                         try {
                             if (cartes.length === 0) {
+                                console.error('[ERROR] Aucune carte disponible');
                                 resetToInitialState();
                                 return;
                             }
 
                             const indexAleatoire = Math.floor(Math.random() * cartes.length);
                             carteActuelle = cartes[indexAleatoire];
+                            console.log(`[DEBUG] Carte sélectionnée: ${carteActuelle.nom}`);
 
                             if (!carteActuelle) {
+                                console.error('[ERROR] Carte sélectionnée invalide');
                                 resetToInitialState();
                                 return;
                             }
 
                             setupCardContent(carteActuelle);
                             
+                            // Afficher la carte et masquer le loading
                             loadingDiv.style.display = 'none';
                             cardContainer.style.display = 'block';
+                            
+                            console.log('[DEBUG] Carte affichée avec succès');
                             
                             if (cardElement) {
                                 cardElement.focus();
                             }
 
                         } catch (e_timeout) {
+                            console.error('[ERROR] Erreur dans setTimeout:', e_timeout);
                             resetToInitialState();
                         }
                     }, 1500);
                     
                 } catch (e_main) {
+                    console.error('[ERROR] Erreur principale drawCardProcess:', e_main);
                     resetToInitialState();
                 }
             }
 
             function resetToInitialState() {
+                console.log('[DEBUG] Reset vers état initial');
                 if (loadingDiv) loadingDiv.style.display = 'none';
                 if (cardContainer) cardContainer.style.display = 'none';
                 if (resetBtn) resetBtn.style.display = 'none';
@@ -514,26 +547,38 @@
             }
 
             function setupCardContent(carte) {
-                if (!cardFront) return;
+                console.log(`[DEBUG] Setup contenu pour: ${carte.nom}`);
+                
+                if (!cardFront) {
+                    console.error('[ERROR] cardFront manquant');
+                    return;
+                }
 
                 const fallbackImage = "https://via.placeholder.com/180x180/cccccc/666666?text=Image+Non+Trouvée";
 
                 cardFront.innerHTML = `
                     <h4 class="card-title">${carte.nom}</h4>
                     <img src="${carte.image}" alt="Illustration de la carte ${carte.nom}" class="card-image" 
-                         onerror="this.onerror=null; this.src='${fallbackImage}';">
+                         onerror="console.warn('Image non trouvée: ${carte.image}'); this.onerror=null; this.src='${fallbackImage}';">
                     <p class="card-text">${carte.texte}</p>
                     <p class="card-intention"><strong>Intention :</strong> ${carte.intention}</p>
                     <div class="card-mantra-section">
                         <p class="card-mantra"><strong>Mantra :</strong> ${carte.mantra}</p>
                     </div>
                 `;
+                console.log('[DEBUG] Contenu carte injecté');
             }
 
             function flipCardAction() {
-                if (!cardElement) return;
+                console.log('[DEBUG] flipCardAction appelé');
+                
+                if (!cardElement) {
+                    console.error('[ERROR] cardElement manquant');
+                    return;
+                }
                 
                 if (!carteRevelee && carteActuelle) {
+                    console.log('[DEBUG] Révélation de la carte');
                     cardElement.classList.add('flipped');
                     carteRevelee = true;
                     
@@ -544,13 +589,21 @@
                     cardElement.setAttribute('aria-label', `Carte révélée: ${nom}. Message: ${texte}. Intention: ${intention}. Mantra: ${mantra}`);
                     
                     setTimeout(() => {
-                        if(resetBtn) resetBtn.style.display = 'inline-block';
+                        if(resetBtn) {
+                            resetBtn.style.display = 'inline-block';
+                            console.log('[DEBUG] Bouton reset affiché');
+                        }
                     }, 800);
                 }
             }
 
             function resetDrawProcess() {
-                if (!cardContainer || !resetBtn || !drawBtn || !cardElement) return;
+                console.log('[DEBUG] resetDrawProcess appelé');
+                
+                if (!cardContainer || !resetBtn || !drawBtn || !cardElement) {
+                    console.error('[ERROR] Éléments manquants pour reset');
+                    return;
+                }
                 
                 cardContainer.style.display = 'none';
                 resetBtn.style.display = 'none';
@@ -565,11 +618,22 @@
                 carteRevelee = false;
                 
                 if (drawBtn) drawBtn.focus();
+                console.log('[DEBUG] Reset terminé');
             }
 
             // Événements
-            if (drawBtn) drawBtn.addEventListener('click', drawCardProcess);
-            if (resetBtn) resetBtn.addEventListener('click', resetDrawProcess);
+            if (drawBtn) {
+                drawBtn.addEventListener('click', drawCardProcess);
+                console.log('[DEBUG] Event listener drawBtn ajouté');
+            } else {
+                console.error('[ERROR] drawBtn manquant pour event listener');
+            }
+            
+            if (resetBtn) {
+                resetBtn.addEventListener('click', resetDrawProcess);
+                console.log('[DEBUG] Event listener resetBtn ajouté');
+            }
+            
             if (cardElement) {
                 cardElement.addEventListener('click', flipCardAction);
                 cardElement.addEventListener('keydown', (event) => {
@@ -578,12 +642,18 @@
                         flipCardAction();
                     }
                 });
+                console.log('[DEBUG] Event listeners cardElement ajoutés');
             }
 
             // Affichage de la page
             window.addEventListener('load', () => {
-                if (document.body) document.body.style.opacity = '1';
+                if (document.body) {
+                    document.body.style.opacity = '1';
+                    console.log('[DEBUG] Page affichée');
+                }
             });
+
+            console.log('[DEBUG] Initialisation terminée avec succès');
         });
     </script>
 </body>
