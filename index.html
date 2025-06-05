@@ -3,580 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tirage de Cartes Oracle</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: white;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 30px 0;
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .card-section {
-            text-align: center;
-            margin: 40px 0;
-        }
-
-        .draw-button {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.3rem;
-            color: white;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-        }
-
-        .draw-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
-        }
-
-        .draw-button:active {
-            transform: translateY(0);
-        }
-
-        .draw-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .card-container {
-            perspective: 1000px;
-            margin: 30px auto;
-            width: 300px;
-            height: 400px;
-        }
-
-        .card {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.8s ease;
-            cursor: pointer;
-        }
-
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .card-back {
-            background: linear-gradient(45deg, #2c3e50, #3498db);
-            color: white;
-            border: 3px solid #ffd700;
-        }
-
-        .card-front {
-            background: white;
-            color: #333;
-            transform: rotateY(180deg);
-            flex-direction: column;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .card-image {
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .card-text {
-            font-size: 1rem;
-            line-height: 1.4;
-            margin-bottom: 10px;
-            color: #555;
-        }
-
-        .card-intention {
-            font-size: 0.9rem;
-            font-style: italic;
-            color: #777;
-            border-top: 1px solid #eee;
-            padding-top: 10px;
-        }
-
-        .loading {
-            display: none;
-            margin: 20px 0;
-        }
-
-        .spinner {
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top: 3px solid white;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .instructions {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 30px 0;
-            backdrop-filter: blur(10px);
-        }
-
-        .instructions h3 {
-            margin-bottom: 15px;
-            color: #ffd700;
-        }
-
-        .reset-button {
-            background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.3);
-            padding: 10px 25px;
-            color: white;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-
-        .reset-button:hover {
-            background: rgba(255,255,255,0.3);
-            border-color: rgba(255,255,255,0.5);
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .card-container {
-                width: 250px;
-                height: 350px;
-            }
-            
-            .card-image {
-                width: 150px;
-                height: 150px;
-            }
-        }
-    </style>
+    <meta name="description" content="Tirage de cartes oracle pour guidance spirituelle et réflexion personnelle, avec messages et intentions.">
+    <title>🔮 Oracle des Chants de l'Âme</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔮</text></svg>">
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🔮 Tirage de Cartes Oracle</h1>
+        <header class="header">
+            <h1>🔮 Oracle des Chants de l'Âme</h1>
             <p>
-                Bienvenue dans votre espace de guidance spirituelle. Concentrez-vous sur une question ou une intention, 
-                puis tirez une carte parmi notre collection de 44 cartes oracle. Chaque carte vous apportera un message 
-                et une intention pour vous accompagner dans votre réflexion et votre cheminement personnel.
+                Bienvenue dans votre espace de guidance spirituelle. Concentrez-vous sur une question ou une intention,
+                puis tirez une carte parmi notre collection de 44 cartes oracle. Chaque carte vous apportera un message,
+                une intention et un mantra pour vous accompagner dans votre réflexion et votre cheminement personnel.
             </p>
-        </div>
+        </header>
 
-        <div class="card-section">
-            <button class="draw-button" onclick="drawCard()" id="drawBtn">
+        <section class="card-section">
+            <button class="draw-button" id="drawBtn" aria-label="Tirer une nouvelle carte oracle">
                 ✨ Tirer une carte
             </button>
 
-            <div class="loading" id="loading">
+            <div class="loading" id="loading" style="display: none;" aria-live="polite" aria-atomic="true">
                 <div class="spinner"></div>
                 <p>Mélange des cartes...</p>
             </div>
 
             <div class="card-container" id="cardContainer" style="display: none;">
-                <div class="card" id="card" onclick="flipCard()">
+                <div class="card" id="card" tabindex="0" aria-label="Carte oracle face cachée. Cliquez ou appuyez sur Entrée pour révéler.">
                     <div class="card-face card-back">
                         <div>🌟 Cliquez pour révéler</div>
                     </div>
-                    <div class="card-face card-front" id="cardFront">
-                        <!-- Contenu de la carte sera inséré ici -->
+                    <div class="card-face card-front" id="cardFront" role="region" aria-live="polite">
+                        <!-- Contenu de la carte sera inséré ici par JavaScript -->
                     </div>
                 </div>
             </div>
 
-            <button class="reset-button" onclick="resetDraw()" id="resetBtn" style="display: none;">
+            <button class="reset-button" id="resetBtn" style="display: none;" aria-label="Effectuer un nouveau tirage">
                 🔄 Nouveau tirage
             </button>
-        </div>
+        </section>
 
-        <div class="instructions">
+        <section class="instructions">
             <h3>💫 Comment utiliser l'oracle</h3>
             <p>
-                1. Prenez un moment pour vous centrer et formuler votre question intérieurement<br>
-                2. Cliquez sur "Tirer une carte" quand vous vous sentez prêt(e)<br>
-                3. Cliquez sur la carte pour la révéler<br>
-                4. Méditez sur le message et l'intention reçus<br>
-                5. Vous pouvez tirer une nouvelle carte quand vous le souhaitez
+                1. Prenez un moment pour vous centrer et formuler votre question intérieurement.<br>
+                2. Cliquez sur "Tirer une carte" quand vous vous sentez prêt(e).<br>
+                3. Cliquez sur la carte (ou appuyez sur Entrée si sélectionnée) pour la révéler.<br>
+                4. Méditez sur le message, l'intention et le mantra reçus.<br>
+                5. Vous pouvez tirer une nouvelle carte quand vous le souhaitez.
             </p>
-        </div>
+        </section>
     </div>
 
-    <script>
-        // Base de données des cartes (vous devrez adapter les noms d'images selon vos fichiers)
-        const cartes = [
-            {
-                image: "images/carte1.jpg",
-                texte: "La force intérieure réside en vous. Faites confiance à votre intuition.",
-                intention: "Cultiver la confiance en soi"
-            },
-            {
-                image: "images/carte2.jpg",
-                texte: "Les nouvelles opportunités se présentent à vous. Restez ouvert(e).",
-                intention: "Accueillir le changement"
-            },
-            {
-                image: "images/carte3.jpg",
-                texte: "La patience est votre alliée. Tout arrive en son temps.",
-                intention: "Développer la patience"
-            },
-            {
-                image: "images/carte4.jpg",
-                texte: "L'amour vous entoure sous toutes ses formes. Ouvrez votre cœur.",
-                intention: "Rayonner l'amour"
-            },
-            {
-                image: "images/carte5.jpg",
-                texte: "Votre créativité demande à s'exprimer. Laissez-la libre cours.",
-                intention: "Libérer sa créativité"
-            },
-            {
-                image: "images/carte6.jpg",
-                texte: "L'équilibre est la clé. Harmonisez tous les aspects de votre vie.",
-                intention: "Trouver l'équilibre"
-            },
-            {
-                image: "images/carte7.jpg",
-                texte: "La gratitude transforme votre réalité. Appréciez ce que vous avez.",
-                intention: "Pratiquer la gratitude"
-            },
-            {
-                image: "images/carte8.jpg",
-                texte: "Votre guérison intérieure est en cours. Soyez doux avec vous-même.",
-                intention: "Permettre la guérison"
-            },
-            {
-                image: "images/carte9.jpg",
-                texte: "La sagesse ancestrale vous guide. Écoutez les signes.",
-                intention: "Honorer la sagesse"
-            },
-            {
-                image: "images/carte10.jpg",
-                texte: "Votre lumière brille plus fort que jamais. Partagez-la avec le monde.",
-                intention: "Rayonner sa lumière"
-            },
-            {
-                image: "images/carte11.jpg",
-                texte: "Les cycles de la vie vous portent vers un renouveau.",
-                intention: "Embrasser le renouveau"
-            },
-            {
-                image: "images/carte12.jpg",
-                texte: "La connexion avec la nature nourrit votre âme.",
-                intention: "Se reconnecter à la nature"
-            },
-            {
-                image: "images/carte13.jpg",
-                texte: "Votre mission de vie se révèle progressivement. Restez à l'écoute.",
-                intention: "Découvrir sa mission"
-            },
-            {
-                image: "images/carte14.jpg",
-                texte: "L'abondance coule naturellement vers vous. Recevez avec joie.",
-                intention: "Accueillir l'abondance"
-            },
-            {
-                image: "images/carte15.jpg",
-                texte: "Votre passé vous a préparé(e) pour ce moment. Avancez avec confiance.",
-                intention: "Intégrer les leçons"
-            },
-            {
-                image: "images/carte16.jpg",
-                texte: "La communication authentique ouvre toutes les portes.",
-                intention: "Communiquer avec authenticité"
-            },
-            {
-                image: "images/carte17.jpg",
-                texte: "Votre sensibilité est un don précieux. Honorez-la.",
-                intention: "Célébrer sa sensibilité"
-            },
-            {
-                image: "images/carte18.jpg",
-                texte: "Le pardon libère votre cœur de tous les fardeaux.",
-                intention: "Pratiquer le pardon"
-            },
-            {
-                image: "images/carte19.jpg",
-                texte: "Votre courage vous mène vers de nouveaux horizons.",
-                intention: "Cultiver le courage"
-            },
-            {
-                image: "images/carte20.jpg",
-                texte: "La méditation apporte clarté et sérénité à votre esprit.",
-                intention: "Développer la présence"
-            },
-            {
-                image: "images/carte21.jpg",
-                texte: "Vos relations évoluent vers plus d'harmonie et de compréhension.",
-                intention: "Harmoniser les relations"
-            },
-            {
-                image: "images/carte22.jpg",
-                texte: "La joie simple du moment présent vous attend.",
-                intention: "Savourer l'instant présent"
-            },
-            {
-                image: "images/carte23.jpg",
-                texte: "Votre intuition vous guide vers les bonnes décisions.",
-                intention: "Faire confiance à son intuition"
-            },
-            {
-                image: "images/carte24.jpg",
-                texte: "La transformation que vous vivez vous élève vers votre véritable essence.",
-                intention: "Embrasser la transformation"
-            },
-            {
-                image: "images/carte25.jpg",
-                texte: "Votre compassion envers vous-même et les autres crée des miracles.",
-                intention: "Développer la compassion"
-            },
-            {
-                image: "images/carte26.jpg",
-                texte: "L'inspiration divine coule à travers vous. Exprimez-la librement.",
-                intention: "Canaliser l'inspiration"
-            },
-            {
-                image: "images/carte27.jpg",
-                texte: "Votre chemin spirituel s'illumine de plus en plus.",
-                intention: "Approfondir sa spiritualité"
-            },
-            {
-                image: "images/carte28.jpg",
-                texte: "La protection divine vous entoure constamment.",
-                intention: "Se sentir protégé(e)"
-            },
-            {
-                image: "images/carte29.jpg",
-                texte: "Vos dons uniques demandent à être partagés avec le monde.",
-                intention: "Partager ses dons"
-            },
-            {
-                image: "images/carte30.jpg",
-                texte: "L'harmonie intérieure se reflète dans votre réalité extérieure.",
-                intention: "Cultiver l'harmonie intérieure"
-            },
-            {
-                image: "images/carte31.jpg",
-                texte: "Votre cœur connaît la vérité. Écoutez-le avec attention.",
-                intention: "Écouter son cœur"
-            },
-            {
-                image: "images/carte32.jpg",
-                texte: "Les synchronicités vous montrent que vous êtes sur la bonne voie.",
-                intention: "Reconnaître les signes"
-            },
-            {
-                image: "images/carte33.jpg",
-                texte: "Votre énergie vibratoire attire exactement ce dont vous avez besoin.",
-                intention: "Élever sa vibration"
-            },
-            {
-                image: "images/carte34.jpg",
-                texte: "La liberté que vous cherchez commence par l'acceptation de qui vous êtes.",
-                intention: "S'accepter pleinement"
-            },
-            {
-                image: "images/carte35.jpg",
-                texte: "Votre ancrage terrestre vous donne la stabilité pour vous élever.",
-                intention: "Cultiver l'ancrage"
-            },
-            {
-                image: "images/carte36.jpg",
-                texte: "L'aventure de la vie vous réserve de belles surprises.",
-                intention: "Rester ouvert(e) aux surprises"
-            },
-            {
-                image: "images/carte37.jpg",
-                texte: "Votre détermination vous mène vers la réalisation de vos rêves.",
-                intention: "Persévérer avec détermination"
-            },
-            {
-                image: "images/carte38.jpg",
-                texte: "La simplicité révèle la beauté authentique de la vie.",
-                intention: "Embrasser la simplicité"
-            },
-            {
-                image: "images/carte39.jpg",
-                texte: "Votre rayonnement inspire et élève ceux qui vous entourent.",
-                intention: "Inspirer par l'exemple"
-            },
-            {
-                image: "images/carte40.jpg",
-                texte: "La confiance en l'univers vous apporte paix et sérénité.",
-                intention: "Faire confiance à l'univers"
-            },
-            {
-                image: "images/carte41.jpg",
-                texte: "Votre vulnérabilité est une force qui crée des connexions authentiques.",
-                intention: "Honorer sa vulnérabilité"
-            },
-            {
-                image: "images/carte42.jpg",
-                texte: "L'éveil de votre conscience vous révèle de nouvelles perspectives.",
-                intention: "Cultiver la conscience"
-            },
-            {
-                image: "images/carte43.jpg",
-                texte: "Votre présence aimante est un cadeau pour le monde.",
-                intention: "Offrir sa présence aimante"
-            },
-            {
-                image: "images/carte44.jpg",
-                texte: "Le cycle se complète et un nouveau chapitre commence.",
-                intention: "Célébrer les nouveaux commencements"
-            }
-        ];
+    <footer>
+        <p>© <span id="currentYear"></span> Votre Nom ou Nom du Projet. Tous droits réservés.</p>
+    </footer>
 
-        let carteActuelle = null;
-        let carteRevele = false;
-
-        function drawCard() {
-            const drawBtn = document.getElementById('drawBtn');
-            const loading = document.getElementById('loading');
-            const cardContainer = document.getElementById('cardContainer');
-            const card = document.getElementById('card');
-            
-            // Désactiver le bouton et montrer le loading
-            drawBtn.disabled = true;
-            loading.style.display = 'block';
-            
-            // Simuler le mélange des cartes
-            setTimeout(() => {
-                // Tirer une carte aléatoire
-                const indexAleatoire = Math.floor(Math.random() * cartes.length);
-                carteActuelle = cartes[indexAleatoire];
-                
-                // Préparer l'affichage de la carte
-                setupCard(carteActuelle);
-                
-                // Cacher le loading et montrer la carte
-                loading.style.display = 'none';
-                cardContainer.style.display = 'block';
-                drawBtn.style.display = 'none';
-                
-                // Reset de l'état de la carte
-                card.classList.remove('flipped');
-                carteRevele = false;
-                
-            }, 2000);
-        }
-
-        function setupCard(carte) {
-            const cardFront = document.getElementById('cardFront');
-            cardFront.innerHTML = `
-                <img src="${carte.image}" alt="Carte Oracle" class="card-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjZjBmMGYwIi8+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iNDAiIGZpbGw9IiNkZGQiLz4KPHRleHQgeD0iMTAwIiB5PSIxMzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5OTkiIGZvbnQtc2l6ZT0iMTIiPkltYWdlIG5vbiBkaXNwb25pYmxlPC90ZXh0Pgo8L3N2Zz4='" />
-                <div class="card-text">${carte.texte}</div>
-                <div class="card-intention"><strong>Intention :</strong> ${carte.intention}</div>
-            `;
-        }
-
-        function flipCard() {
-            const card = document.getElementById('card');
-            const resetBtn = document.getElementById('resetBtn');
-            
-            if (!carteRevele) {
-                card.classList.add('flipped');
-                carteRevele = true;
-                
-                // Montrer le bouton reset après un délai
-                setTimeout(() => {
-                    resetBtn.style.display = 'inline-block';
-                }, 800);
-            }
-        }
-
-        function resetDraw() {
-            const drawBtn = document.getElementById('drawBtn');
-            const cardContainer = document.getElementById('cardContainer');
-            const resetBtn = document.getElementById('resetBtn');
-            const card = document.getElementById('card');
-            
-            // Remettre l'interface initiale
-            cardContainer.style.display = 'none';
-            resetBtn.style.display = 'none';
-            drawBtn.style.display = 'inline-block';
-            drawBtn.disabled = false;
-            
-            // Reset de la carte
-            card.classList.remove('flipped');
-            carteActuelle = null;
-            carteRevele = false;
-        }
-
-        // Animation d'entrée au chargement de la page
-        window.addEventListener('load', () => {
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
-        });
-    </script>
+    <script src="script.js" defer></script>
 </body>
 </html>
