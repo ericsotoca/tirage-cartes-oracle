@@ -5,8 +5,271 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Tirage de cartes oracle pour guidance spirituelle et réflexion personnelle, avec messages et intentions.">
     <title>🔮 Oracle des Chants de l'Âme</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔮</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .draw-button, .reset-button, .play-mantra-button {
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .draw-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        }
+        .draw-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+        }
+        .draw-button:active {
+            transform: translateY(0);
+        }
+        .draw-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            margin: 30px auto;
+            width: 300px;
+            height: 420px; 
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            overflow: hidden; 
+        }
+
+        .card-back {
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            color: white;
+            border: 3px solid #ffd700;
+            text-align: center;
+        }
+
+        .card-front {
+            background: white;
+            color: #333;
+            transform: rotateY(180deg);
+            flex-direction: column;
+            padding: 15px;
+            text-align: center;
+            justify-content: space-around; 
+        }
+
+        .card-image {
+            width: 180px; 
+            height: 180px; 
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .card-title { 
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .card-text {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            color: #555;
+            flex-grow: 1; 
+        }
+
+        .card-intention {
+            font-size: 0.9rem;
+            font-style: italic;
+            color: #777;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .card-mantra-section {
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .card-mantra {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #6a1b9a; 
+            margin-bottom: 0;
+        }
+
+        .play-mantra-button {
+            background: linear-gradient(45deg, #ab47bc, #8e24aa); 
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        .play-mantra-button:hover {
+            background: linear-gradient(45deg, #9c27b0, #7b1fa2);
+        }
+
+        .loading {
+            margin: 20px 0;
+            text-align: center; 
+        }
+        .loading p {
+            margin-top: 10px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .instructions {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); 
+        }
+
+        .instructions h3 {
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        .instructions p {
+            line-height: 1.7;
+        }
+
+        .reset-button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            margin-top: 20px;
+        }
+        .reset-button:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .header p { font-size: 1rem; }
+            .card-container { width: 280px; height: 400px; }
+            .card-image { width: 150px; height: 150px; }
+            .draw-button, .reset-button { padding: 12px 25px; font-size: 1.1rem; }
+        }
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.8rem; }
+            .card-container { width: calc(100% - 40px); max-width: 280px; height: auto; min-height: 380px; }
+            .card-front { padding: 10px; }
+            .card-image { width: 120px; height: 120px; }
+            .card-text { font-size: 0.9rem; }
+            .card-intention, .card-mantra { font-size: 0.85rem; }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -61,6 +324,231 @@
         <p>© <span id="currentYear"></span> Votre Nom ou Nom du Projet. Tous droits réservés.</p>
     </footer>
 
-    <script src="script.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const drawBtn = document.getElementById('drawBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const loadingDiv = document.getElementById('loading');
+            const cardContainer = document.getElementById('cardContainer');
+            const cardElement = document.getElementById('card');
+            const cardFront = document.getElementById('cardFront');
+            const currentYearSpan = document.getElementById('currentYear');
+
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+            }
+
+            // #############################################################################
+            // ## VOS 6 CARTES - REMPLACEZ LES PLACEHOLDERS PAR VOS VRAIES INFOS        ##
+            // #############################################################################
+            const cartes = [
+                {
+                    nom: "Force Intérieure", // REMPLACEZ PAR LE NOM DE VOTRE CARTE 1
+                    image: "images/carte1.jpg", // Correct si votre fichier est images/carte1.jpg
+                    texte: "La force intérieure réside en vous. Faites confiance à votre intuition.", // REMPLACEZ
+                    intention: "Cultiver la confiance en soi", // REMPLACEZ
+                    mantra: "Aham Brahmasmi (Je suis l'Absolu/Divin)" // REMPLACEZ
+                },
+                {
+                    nom: "Nouvelles Opportunités", // REMPLACEZ PAR LE NOM DE VOTRE CARTE 2
+                    image: "images/carte2.jpg", // Correct si votre fichier est images/carte2.jpg
+                    texte: "Les nouvelles opportunités se présentent à vous. Restez ouvert(e).", // REMPLACEZ
+                    intention: "Accueillir le changement", // REMPLACEZ
+                    mantra: "Om Gam Ganapataye Namaha (Salutations à Ganesh, qui lève les obstacles)" // REMPLACEZ
+                },
+                {
+                    nom: "Patience", // REMPLACEZ PAR LE NOM DE VOTRE CARTE 3
+                    image: "images/carte3.jpg", // Correct si votre fichier est images/carte3.jpg
+                    texte: "La patience est votre alliée. Tout arrive en son temps.", // REMPLACEZ
+                    intention: "Développer la patience", // REMPLACEZ
+                    mantra: "Shanti Hum (Je suis la paix)" // REMPLACEZ
+                },
+                {
+                    nom: "Amour Universel", // REMPLACEZ PAR LE NOM DE VOTRE CARTE 4
+                    image: "images/carte4.jpg", // Correct si votre fichier est images/carte4.jpg
+                    texte: "L'amour vous entoure sous toutes ses formes. Ouvrez votre cœur.", // REMPLACEZ
+                    intention: "Rayonner l'amour", // REMPLACEZ
+                    mantra: "Aham Prema (Je suis l'Amour Divin)" // REMPLACEZ
+                },
+                {
+                    nom: "Créativité Débordante", // REMPLACEZ PAR LE NOM DE VOTRE CARTE 5
+                    image: "images/carte5.jpg", // Correct si votre fichier est images/carte5.jpg
+                    texte: "Votre créativité demande à s'exprimer. Laissez-la libre cours.", // REMPLACEZ
+                    intention: "Libérer sa créativité", // REMPLACEZ
+                    mantra: "Om Aim Saraswatyai Namaha (Salutations à Saraswati, déesse de la créativité)" // REMPLACEZ
+                },
+                {
+                    nom: "Équilibre Sacré", // REMPLACEZ PAR LE NOM DE VOTRE CARTE 6
+                    image: "images/carte6.jpg", // Correct si votre fichier est images/carte6.jpg
+                    texte: "L'équilibre est la clé. Harmonisez tous les aspects de votre vie.", // REMPLACEZ
+                    intention: "Trouver l'équilibre", // REMPLACEZ
+                    mantra: "YAM (Bija Mantra du chakra du cœur, pour l'équilibre)" // REMPLACEZ
+                }
+            ];
+            // #############################################################################
+
+            if (cartes.length === 0) {
+                alert("ERREUR CRITIQUE : Le tableau 'cartes' est vide ! L'application ne peut pas fonctionner.");
+                if(drawBtn) drawBtn.disabled = true;
+            } else {
+                console.log(`Nombre de cartes chargées: ${cartes.length}`);
+            }
+
+            let carteActuelle = null;
+            let carteRevelee = false;
+            // const speechSynth = null; // Synthèse vocale DÉSACTIVÉE 
+
+            function drawCardProcess() {
+                console.log("drawCardProcess() appelé.");
+                try {
+                    if (!drawBtn || !loadingDiv || !cardContainer || !resetBtn || !cardElement) {
+                        alert("Erreur: Éléments DOM manquants pour drawCardProcess.");
+                        return;
+                    }
+
+                    drawBtn.disabled = true;
+                    drawBtn.style.display = 'none';
+                    loadingDiv.style.display = 'block';
+                    cardContainer.style.display = 'none';
+                    resetBtn.style.display = 'none';
+
+                    if (cardElement.classList.contains('flipped')) {
+                        cardElement.classList.remove('flipped');
+                    }
+                    carteRevelee = false;
+                    cardElement.setAttribute('aria-label', 'Carte oracle face cachée. Cliquez ou appuyez sur Entrée pour révéler.');
+
+                    setTimeout(() => {
+                        console.log("Dans le setTimeout pour tirer la carte.");
+                        try {
+                            if (cartes.length === 0) {
+                                alert("ERREUR : Aucune carte à tirer.");
+                                loadingDiv.style.display = 'none';
+                                drawBtn.style.display = 'inline-block';
+                                drawBtn.disabled = false;
+                                return;
+                            }
+
+                            const indexAleatoire = Math.floor(Math.random() * cartes.length);
+                            carteActuelle = cartes[indexAleatoire];
+                            console.log(`Carte sélectionnée: ${carteActuelle ? carteActuelle.nom : 'ERREUR CARTE UNDEFINED'}`);
+
+                            if (!carteActuelle) {
+                                alert("ERREUR : Problème lors de la sélection de la carte.");
+                                loadingDiv.style.display = 'none';
+                                drawBtn.style.display = 'inline-block';
+                                drawBtn.disabled = false;
+                                return;
+                            }
+
+                            setupCardContent(carteActuelle);
+                            
+                            if (loadingDiv) loadingDiv.style.display = 'none';
+                            if (cardContainer) cardContainer.style.display = 'block';
+                            
+                            if (cardElement) {
+                                cardElement.focus();
+                            }
+
+                        } catch (e_timeout) {
+                            console.error(`Erreur DANS setTimeout: ${e_timeout.message}`, e_timeout);
+                            alert(`Erreur interne (timeout): ${e_timeout.message}. Vérifiez la console si possible.`);
+                            if (loadingDiv) loadingDiv.style.display = 'none';
+                            if (drawBtn) { drawBtn.style.display = 'inline-block'; drawBtn.disabled = false; }
+                        }
+                    }, 1000);
+                } catch (e_main) {
+                    console.error(`Erreur principale DANS drawCardProcess: ${e_main.message}`, e_main);
+                    alert(`Erreur principale: ${e_main.message}. Vérifiez la console si possible.`);
+                    if (loadingDiv) loadingDiv.style.display = 'none';
+                    if (drawBtn) { drawBtn.style.display = 'inline-block'; drawBtn.disabled = false; }
+                }
+            }
+
+            function setupCardContent(carte) {
+                console.log(`setupCardContent appelée pour: ${carte.nom}, image: ${carte.image}`);
+                if (!cardFront) {
+                    alert("Erreur critique: cardFront est manquant dans setupCardContent.");
+                    return;
+                }
+                // Assurez-vous que ce fichier existe : images/fallback-card-image.svg (tout en minuscules)
+                const fallbackImage = "images/fallback-card-image.svg"; 
+
+                cardFront.innerHTML = `
+                    <h4 class="card-title">${carte.nom}</h4>
+                    <img src="${carte.image}" alt="Illustration de la carte ${carte.nom}" class="card-image" 
+                         onerror="this.onerror=null; this.src='${fallbackImage}'; alert('IMAGE NON TROUVÉE : ${carte.image}. Chemin ou casse incorrecte ? Fallback utilisé. Vérifiez que le fichier ${fallbackImage} existe aussi et que son nom est exact.'); console.error('Erreur chargement image : ${carte.image}');">
+                    <p class="card-text">${carte.texte}</p>
+                    <p class="card-intention"><strong>Intention :</strong> ${carte.intention}</p>
+                    <div class="card-mantra-section">
+                        <p class="card-mantra"><strong>Mantra :</strong> ${carte.mantra}</p>
+                        ${'' /* Pas de bouton mantra car speechSynth est désactivé */}
+                    </div>
+                `;
+                console.log("Contenu de la carte injecté.");
+            }
+
+            function flipCardAction() {
+                if (!cardElement) {
+                    alert("Erreur: cardElement manquant pour flipCardAction.");
+                    return;
+                }
+                if (!carteRevelee && carteActuelle) {
+                    cardElement.classList.add('flipped');
+                    carteRevelee = true;
+                    const nom = carteActuelle.nom || "Inconnu";
+                    const texte = carteActuelle.texte || "Pas de texte";
+                    const intention = carteActuelle.intention || "Pas d'intention";
+                    const mantra = carteActuelle.mantra || "Pas de mantra";
+                    cardElement.setAttribute('aria-label', `Carte révélée: ${nom}. Message: ${texte}. Intention: ${intention}. Mantra: ${mantra}`);
+                    
+                    setTimeout(() => {
+                        if(resetBtn) resetBtn.style.display = 'inline-block';
+                    }, 800);
+                }
+            }
+
+            function resetDrawProcess() {
+                if (!cardContainer || !resetBtn || !drawBtn || !cardElement) {
+                    alert("Erreur: Éléments DOM manquants pour resetDrawProcess.");
+                    return;
+                }
+                cardContainer.style.display = 'none';
+                resetBtn.style.display = 'none';
+                drawBtn.style.display = 'inline-block';
+                drawBtn.disabled = false;
+                if (cardElement.classList.contains('flipped')) {
+                    cardElement.classList.remove('flipped');
+                }
+                carteActuelle = null;
+                carteRevelee = false;
+                if (drawBtn) drawBtn.focus();
+            }
+
+            window.addEventListener('load', () => {
+                if (document.body) document.body.style.opacity = '1';
+                console.log("Page chargée.");
+            });
+
+            if (drawBtn) {
+                drawBtn.addEventListener('click', drawCardProcess);
+            } else {
+                alert("ERREUR CRITIQUE: drawBtn n'a pas été trouvé lors de l'initialisation!");
+            }
+            if (resetBtn) {
+                resetBtn.addEventListener('click', resetDrawProcess);
+            }
+            if (cardElement) {
+                cardElement.addEventListener('click', flipCardAction);
+                cardElement.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        flipCardAction();
+                    }
+                });
+            }
+            console.log("Fin de l'initialisation du script.");
+        });
+    </script>
 </body>
 </html>
