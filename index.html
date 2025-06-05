@@ -370,7 +370,7 @@
             resetBtn.style.display = 'none';
             currentYearSpan.textContent = new Date().getFullYear();
 
-            // Cartes oracle avec images placeholder
+            // Cartes oracle avec images corrigées
             const cartes = [
                 {
                     nom: "Force Intérieure",
@@ -420,6 +420,9 @@
             cartes.forEach(carte => {
                 const img = new Image();
                 img.src = carte.image;
+                img.onerror = () => {
+                    img.src = "https://via.placeholder.com/180x180/cccccc/666666?text=Image+Non+Trouvée";
+                };
             });
 
             let carteActuelle = null;
@@ -456,7 +459,7 @@
                          onerror="this.src='${fallbackImage}'">
                     <p class="card-text">${carte.texte}</p>
                     <p class="card-intention"><strong>Intention :</strong> ${carte.intention}</p>
-                    <div class="card-mantra-section">
+                   utt                    <div class="card-mantra-section">
                         <p class="card-mantra"><strong>Mantra :</strong> ${carte.mantra}</p>
                     </div>
                 `;
