@@ -39,48 +39,90 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let carteActuelle = null;
     let carteRevelee = false;
-    // const speechSynth = window.speechSynthesis; // DÉSACTIVÉ
-    // let voices = []; // DÉSACTIVÉ
+    const speechSynth = window.speechSynthesis;
+    let voices = []; 
 
-    // function loadVoices() { // DÉSACTIVÉ
-    //     voices = speechSynth.getVoices();
-    //     if (speechSynth.onvoiceschanged !== undefined) {
-    //         speechSynth.onvoiceschanged = () => {
-    //             voices = speechSynth.getVoices();
-    //         };
-    //     }
-    // }
-    // if (speechSynth) { // DÉSACTIVÉ
-    //     loadVoices();
-    // }
-
-    function drawCardProcess() {
-        drawBtn.disabled = true;
-        drawBtn.style.display = 'none';
-        loadingDiv.style.display = 'block';
-        cardContainer.style.display = 'none';
-        resetBtn.style.display = 'none';
-        
-        if (cardElement.classList.contains('flipped')) {
-            cardElement.classList.remove('flipped');
+    function loadVoices() {
+        voices = speechSynth.getVoices();
+        if (speechSynth.onvoiceschanged !== undefined) {
+            speechSynth.onvoiceschanged = () => {
+                voices = speechSynth.getVoices();
+            };
         }
-        carteRevelee = false;
-        cardElement.setAttribute('aria-label', 'Carte oracle face cachée. Cliquez ou appuyez sur Entrée pour révéler.');
-
-        setTimeout(() => {
-            const indexAleatoire = Math.floor(Math.random() * cartes.length);
-            carteActuelle = cartes[indexAleatoire];
-            setupCardContent(carteActuelle);
-
-            loadingDiv.style.display = 'none';
-            cardContainer.style.display = 'block';
-            cardElement.focus();
-        }, 1500 + Math.random() * 1000);
+    }
+    if (speechSynth) {
+        loadVoices();
     }
 
+    // Fonction pour tirer une carte (AVEC TRY...CATCH)
+    function drawCardProcess() {
+        try { // AJOUT TRY
+            drawBtn.disabled = true;
+            drawBtn.style.display = 'none';
+            loadingDiv.style.display = 'block';
+            cardContainer.style.display = 'none';
+            resetBtn.style.display = 'none';
+            
+            if (cardElement.classList.contains('flipped')) {
+                cardElement.classList.remove('flipped');
+            }
+            carteRevelee = false;
+            cardElement.setAttribute('aria-label', 'Carte oracle face cachée. Cliquez ou appuyez sur Entrée pour révéler.');
+
+            setTimeout(() => {
+                try { // AJOUT TRY
+                    const indexAleatoire = Math.floor(Math.random() * cartes.length);
+                    carteActuelle = cartes[indexAleatoire];
+
+                    if (!carteActuelle) {
+                        console.error("ERREUR CRITIQUE: carteActuelle est undefined!", "Index généré:", indexAleatoire, "Taille du tableau cartes:", cartes.length);
+                        alert("Une erreur critique est survenue lors de la sélection de la carte. L'application pourrait ne pas fonctionner. Vérifiez la console.");
+                        // Tentative de réinitialisation de l'interface
+                        loadingDiv.style.display = 'none';
+                        drawBtn.style.display = 'inline-block';
+                        drawBtn.disabled = false;
+                        return; // Arrêter l'exécution ici
+                    }
+
+                    setupCardContent(carteActuelle);
+
+                    loadingDiv.style.display = 'none';
+                    cardContainer.style.display = 'block';
+                    cardElement.focus();
+                } catch (e_timeout) { // AJOUT CATCH
+                    console.error("Erreur dans le setTimeout de drawCardProcess:", e_timeout.message, e_timeout.stack, e_timeout);
+                    alert("Une erreur interne est survenue pendant le chargement de la carte. Veuillez vérifier la console du navigateur (si possible) et réessayer. Détails: " + e_timeout.message);
+                    // Réinitialisation de l'interface en cas d'erreur
+                    loadingDiv.style.display = 'none';
+                    drawBtn.style.display = 'inline-block';
+                    drawBtn.disabled = false;
+                    cardContainer.style.display = 'none';
+                    resetBtn.style.display = 'none';
+                }
+            }, 1500 + Math.random() * 1000);
+        } catch (e_main) { // AJOUT CATCH
+            console.error("Erreur principale dans drawCardProcess:", e_main.message, e_main.stack, e_main);
+            alert("Une erreur principale est survenue avant le chargement de la carte. Veuillez vérifier la console du navigateur (si possible) et réessayer. Détails: " + e_main.message);
+            // Réinitialisation de l'interface en cas d'erreur
+            loadingDiv.style.display = 'none';
+            drawBtn.style.display = 'inline-block';
+            drawBtn.disabled = false;
+        }
+    }
+
+    // Fonction pour configurer le contenu de la carte
     function setupCardContent(carte) {
-        const fallbackImage = "images/fallback-card-image.svg";
-        // const mantraToSpeak = carte.mantra.includes('(') ? carte.mantra.substring(0, carte.mantra.indexOf('(')).trim() : carte.mantra; // DÉSACTIVÉ
+        // Assurez-vous que carte et ses propriétés existent pour éviter les erreurs
+        if (!carte || typeof carte.nom === 'undefined') {
+            console.error("Tentative de configurer une carte invalide ou incomplète:", carte);
+            // Vous pourriez vouloir afficher un message d'erreur à l'utilisateur ici
+            // ou réinitialiser l'état de l'application
+            cardFront.innerHTML = `<p style="color:red; padding:20px;">Erreur: Données de carte invalides.</p>`;
+            return;
+        }
+
+        const fallbackImage = "images/fallback-card-image.svg"; 
+        const mantraToSpeak = carte.mantra && carte.mantra.includes('(') ? carte.mantra.substring(0, carte.mantra.indexOf('(')).trim() : (carte.mantra || "");
 
         cardFront.innerHTML = `
             <h4 class="card-title">${carte.nom}</h4>
@@ -89,31 +131,38 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="card-intention"><strong>Intention :</strong> ${carte.intention}</p>
             <div class="card-mantra-section">
                 <p class="card-mantra"><strong>Mantra :</strong> ${carte.mantra}</p>
-                ${'' /* Ancien bouton pour synthèse vocale: speechSynth ? `<button class="play-mantra-button" data-mantra="${mantraToSpeak}" aria-label="Écouter le mantra ${mantraToSpeak}">🔊 Chanter</button>` : '' */}
+                ${speechSynth && mantraToSpeak ? `<button class="play-mantra-button" data-mantra="${mantraToSpeak}" aria-label="Écouter le mantra ${mantraToSpeak}">🔊 Chanter</button>` : ''}
             </div>
         `;
 
-        // const playMantraBtn = cardFront.querySelector('.play-mantra-button'); // DÉSACTIVÉ
-        // if (playMantraBtn) { // DÉSACTIVÉ
-        //     playMantraBtn.addEventListener('click', (event) => {
-        //         event.stopPropagation();
-        //         // speakMantra(event.target.dataset.mantra); // DÉSACTIVÉ
-        //     });
-        // }
-    }
-
-    function flipCardAction() {
-        if (!carteRevelee && carteActuelle) {
-            cardElement.classList.add('flipped');
-            carteRevelee = true;
-            cardElement.setAttribute('aria-label', `Carte révélée: ${carteActuelle.nom}. Message: ${carteActuelle.texte}. Intention: ${carteActuelle.intention}. Mantra: ${carteActuelle.mantra}`);
-            
-            setTimeout(() => {
-                resetBtn.style.display = 'inline-block';
-            }, 800);
+        const playMantraBtn = cardFront.querySelector('.play-mantra-button');
+        if (playMantraBtn) {
+            playMantraBtn.addEventListener('click', (event) => {
+                event.stopPropagation(); 
+                speakMantra(event.target.dataset.mantra);
+            });
         }
     }
 
+    // Fonction pour retourner la carte
+    function flipCardAction() {
+        if (!carteRevelee && carteActuelle) { 
+            cardElement.classList.add('flipped');
+            carteRevelee = true;
+            // Vérifiez que carteActuelle et ses propriétés existent avant de les utiliser
+            const nom = carteActuelle.nom || "Inconnu";
+            const texte = carteActuelle.texte || "Pas de texte";
+            const intention = carteActuelle.intention || "Pas d'intention";
+            const mantra = carteActuelle.mantra || "Pas de mantra";
+            cardElement.setAttribute('aria-label', `Carte révélée: ${nom}. Message: ${texte}. Intention: ${intention}. Mantra: ${mantra}`);
+            
+            setTimeout(() => {
+                resetBtn.style.display = 'inline-block';
+            }, 800); 
+        }
+    }
+
+    // Fonction pour réinitialiser le tirage
     function resetDrawProcess() {
         cardContainer.style.display = 'none';
         resetBtn.style.display = 'none';
@@ -126,47 +175,55 @@ document.addEventListener('DOMContentLoaded', () => {
         carteActuelle = null;
         carteRevelee = false;
         
-        // if (speechSynth && speechSynth.speaking) { // DÉSACTIVÉ
-        //     speechSynth.cancel();
-        // }
+        if (speechSynth && speechSynth.speaking) {
+            speechSynth.cancel(); 
+        }
         drawBtn.focus();
     }
 
-    // function speakMantra(mantraText) { // DÉSACTIVÉ
-    //     if (!speechSynth || !mantraText) {
-    //         if(!speechSynth) console.warn("La synthèse vocale n'est pas supportée par votre navigateur.");
-    //         return;
-    //     }
+    // Fonction pour lire le mantra
+    function speakMantra(mantraText) {
+        if (!speechSynth || !mantraText) {
+            if(!speechSynth) console.warn("La synthèse vocale n'est pas supportée par votre navigateur.");
+            return;
+        }
 
-    //     if (speechSynth.speaking) {
-    //         speechSynth.cancel();
-    //     }
+        if (speechSynth.speaking) {
+            speechSynth.cancel();
+        }
 
-    //     const utterance = new SpeechSynthesisUtterance(mantraText);
+        const utterance = new SpeechSynthesisUtterance(mantraText);
         
-    //     let voiceToUse = voices.find(voice => voice.lang === 'fr-FR' && voice.localService);
-    //     if (!voiceToUse) voiceToUse = voices.find(voice => voice.lang.startsWith('fr') && voice.localService);
-    //     if (!voiceToUse) voiceToUse = voices.find(voice => voice.lang === 'fr-FR');
-    //     if (!voiceToUse) voiceToUse = voices.find(voice => voice.lang.startsWith('fr'));
+        let voiceToUse = voices.find(voice => voice.lang === 'fr-FR' && voice.localService);
+        if (!voiceToUse) voiceToUse = voices.find(voice => voice.lang.startsWith('fr') && voice.localService);
+        if (!voiceToUse) voiceToUse = voices.find(voice => voice.lang === 'fr-FR'); 
+        if (!voiceToUse) voiceToUse = voices.find(voice => voice.lang.startsWith('fr'));
         
-    //     if (voiceToUse) {
-    //         utterance.voice = voiceToUse;
-    //     } else {
-    //         utterance.lang = 'fr-FR';
-    //         console.warn("Aucune voix française spécifique trouvée, utilisation de la voix par défaut du navigateur pour 'fr-FR'.");
-    //     }
+        if (voiceToUse) {
+            utterance.voice = voiceToUse;
+        } else {
+            utterance.lang = 'fr-FR'; 
+            console.warn("Aucune voix française spécifique trouvée, utilisation de la voix par défaut du navigateur pour 'fr-FR'.");
+        }
 
-    //     utterance.pitch = 1;
-    //     utterance.rate = 0.8;
-    //     utterance.volume = 1;
+        utterance.pitch = 1;
+        utterance.rate = 0.8; 
+        utterance.volume = 1; 
         
-    //     speechSynth.speak(utterance);
-    // }
+        try { // AJOUT TRY pour speechSynth.speak
+            speechSynth.speak(utterance);
+        } catch (e_speak) {
+            console.error("Erreur lors de la tentative de lecture du mantra:", e_speak.message, e_speak.stack, e_speak);
+            alert("Impossible de lire le mantra. La synthèse vocale a rencontré un problème. Détails: " + e_speak.message);
+        }
+    }
 
+    // Animation d'entrée au chargement de la page
     window.addEventListener('load', () => {
         document.body.style.opacity = '1';
     });
 
+    // Écouteurs d'événements
     if (drawBtn) drawBtn.addEventListener('click', drawCardProcess);
     if (resetBtn) resetBtn.addEventListener('click', resetDrawProcess);
     
@@ -174,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cardElement.addEventListener('click', flipCardAction);
         cardElement.addEventListener('keydown', (event) => {
             if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
+                event.preventDefault(); 
                 flipCardAction();
             }
         });
